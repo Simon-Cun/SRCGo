@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+echo "Running frontend checks..."
+cd frontend || exit 1
+npx tsc --noEmit || exit 1
+npm run lint || exit 1
+npx prettier --check src || exit 1
+cd ..
+
+echo "Running backend checks..."
+cd backend || exit 1
+npx tsc --noEmit || exit 1
+npm run lint || exit 1
+npx prettier --check . --ignore-path ../.prettierignore || exit 1
+cd ..
+
+echo "All checks passed."
