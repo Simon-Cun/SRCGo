@@ -4,16 +4,9 @@ import { useEffect, useRef } from 'react';
 interface BarcodeDisplayProps {
   value: string;
   isLoading: boolean;
-  isHighlighted?: boolean;
-  onClick?: () => void;
 }
 
-const BarcodeDisplay = ({
-  value,
-  isLoading,
-  isHighlighted = false,
-  onClick,
-}: BarcodeDisplayProps) => {
+const BarcodeDisplay = ({ value, isLoading }: BarcodeDisplayProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -40,24 +33,14 @@ const BarcodeDisplay = ({
   }
 
   return (
-    <button
-      onClick={onClick}
-      className={[
-        'w-full bg-white rounded-xl p-md text-center cursor-pointer transition-all duration-200',
-        'border-3',
-        isHighlighted ? 'border-primary-gold shadow-gold-glow' : 'border-transparent',
-        onClick ? 'active:opacity-80' : 'cursor-default',
-      ].join(' ')}
-      aria-label={onClick ? 'Tap to toggle brightness' : undefined}
-      type="button"
-    >
+    <div className="w-full bg-white rounded-xl p-md text-center">
       <svg ref={svgRef} className="mx-auto max-w-full" />
       {value && (
         <p className="text-center text-xs text-neutral-gray500 mt-sm font-mono tracking-wider">
           {value}
         </p>
       )}
-    </button>
+    </div>
   );
 };
 
