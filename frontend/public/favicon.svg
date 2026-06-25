@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" fill="#003DA5" rx="8"/>
+
+  <!-- Corner brackets -->
+  <path d="M7 19 L7 7 L19 7" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M45 7 L57 7 L57 19" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M7 45 L7 57 L19 57" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M45 57 L57 57 L57 45" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Left dash -->
+  <rect x="11" y="29.5" width="6" height="5" fill="#FFB81C" rx="1.5"/>
+
+  <!-- Gold waveform bars (centered at x=32, y=32) -->
+  <rect x="19" y="26" width="3"   height="12" fill="#FFB81C" rx="1.5"/>
+  <rect x="24" y="22" width="2.5" height="20" fill="#FFB81C" rx="1.5"/>
+  <rect x="28" y="24" width="3"   height="16" fill="#FFB81C" rx="1.5"/>
+  <rect x="32" y="18" width="3.5" height="28" fill="#FFB81C" rx="1.5"/>
+  <rect x="37" y="24" width="3"   height="16" fill="#FFB81C" rx="1.5"/>
+  <rect x="41" y="22" width="2.5" height="20" fill="#FFB81C" rx="1.5"/>
+  <rect x="45" y="26" width="3"   height="12" fill="#FFB81C" rx="1.5"/>
+
+  <!-- Right dash -->
+  <rect x="47" y="29.5" width="6" height="5" fill="#FFB81C" rx="1.5"/>
+</svg>
