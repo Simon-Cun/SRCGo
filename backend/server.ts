@@ -1,9 +1,9 @@
 import cors from 'cors';
 import express from 'express';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import loginHandler from './api/auth/login';
-import sessionHandler from './api/auth/session';
-import barcodeHandler from './api/barcode';
+import loginHandler from '@api/auth/login';
+import sessionHandler from '@api/auth/session';
+import barcodeHandler from '@api/barcode';
 
 const app = express();
 

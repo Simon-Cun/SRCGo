@@ -7,10 +7,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "paths": {
-      "@api/*": ["../api/*"]
-    }
+    "noEmit": true
   },
-  "include": ["server.ts", "../api/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["api/**/*"]
 }

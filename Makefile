@@ -12,9 +12,11 @@ dev:
 	cd frontend && npm run dev
 
 lint:
+	npm run lint
 	cd frontend && npm run lint
 	cd backend && npm run lint
 
 format:
+	npm run format
 	cd frontend && npm run format
 	cd backend && npm run format
