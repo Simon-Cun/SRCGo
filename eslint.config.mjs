@@ -6,10 +6,10 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['node_modules/**', 'frontend/**', 'backend/**'],
+    ignores: ['node_modules/**', 'frontend/**', '.wrangler/**'],
   },
   {
-    files: ['api/**/*.ts'],
+    files: ['functions/**/*.ts', 'lib/**/*.ts'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -17,7 +17,7 @@ export default [
         sourceType: 'module',
       },
       globals: {
-        ...globals.node,
+        ...globals.serviceworker,
       },
     },
     plugins: {

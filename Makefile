@@ -1,22 +1,22 @@
-.PHONY: setup dev lint format
+.PHONY: setup dev lint format deploy
 
 setup:
 	npm install
-	cd backend && npm install
 	cd frontend && npm install
 
 dev:
-	@echo "Starting backend (Express + tsx watch) and frontend (Vite)..."
+	@echo "Starting API (wrangler pages dev) and frontend (Vite)..."
 	@trap 'kill 0' SIGINT; \
-	cd backend && npx tsx watch server.ts & \
+	npx wrangler pages dev --port 3000 & \
 	cd frontend && npm run dev
 
 lint:
 	npm run lint
 	cd frontend && npm run lint
-	cd backend && npm run lint
 
 format:
 	npm run format
 	cd frontend && npm run format
-	cd backend && npm run format
+
+deploy:
+	npm run deploy

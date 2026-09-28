@@ -7,8 +7,8 @@ A web port of the [SRCGo](https://github.com/SRCGO) mobile app. Authenticates wi
 | Layer | Technology |
 |---|---|
 | Frontend | React 18 + TypeScript + TailwindCSS (Vite) |
-| Backend | Node.js + Express + TypeScript |
-| Deployment | Vercel (serverless functions) |
+| Backend | Cloudflare Pages Functions (TypeScript, Workers runtime) |
+| Deployment | Cloudflare Pages |
 
 ---
 
@@ -35,19 +35,18 @@ SRCGo-Web/
 │   ├── eslint.config.js
 │   ├── tailwind.config.ts
 │   └── vite.config.ts
-├── backend/                # Express dev server + Vercel serverless handlers
-│   ├── api/
-│   │   ├── auth/
-│   │   │   ├── login.ts    # POST /api/auth/login  — UCR CAS auth flow
-│   │   │   └── session.ts  # DELETE /api/auth/session  — logout
-│   │   └── barcode.ts      # GET /api/barcode  — InnoSoft barcode fetch
-│   ├── eslint.config.mjs
-│   └── server.ts           # Local Express server (wraps Vercel handlers)
+├── functions/              # Cloudflare Pages Functions (file-based routes)
+│   └── api/
+│       ├── auth/
+│       │   ├── login.ts    # POST /api/auth/login  — UCR CAS auth flow
+│       │   └── session.ts  # DELETE /api/auth/session  — logout
+│       └── barcode.ts      # GET /api/barcode  — InnoSoft barcode fetch
+├── lib/                    # Shared helpers (cookie-aware fetch client, session cookie)
 ├── .gitignore
 ├── .prettierrc
 ├── Makefile
-├── package.json            # Root — husky only
-└── vercel.json
+├── package.json            # Root — functions deps, wrangler, husky
+└── wrangler.toml           # Cloudflare Pages config
 ```
 
 ---
@@ -65,7 +64,7 @@ SRCGo-Web/
 make setup
 ```
 
-This installs dependencies in `frontend/`, `backend/`, and the root (husky).
+This installs dependencies in `frontend/` and the root (functions, wrangler, husky).
 
 ### Run locally
 
@@ -78,7 +77,7 @@ Starts both servers with hot reload:
 | Server | URL |
 |---|---|
 | Frontend (Vite) | http://localhost:8000 |
-| Backend (Express) | http://localhost:3000 |
+| API (`wrangler pages dev`) | http://localhost:3000 |
 
 The frontend proxies all `/api` requests to the backend, so you only need to open `localhost:8000`.
 
@@ -105,8 +104,8 @@ The barcode auto-refreshes every 12 seconds (configurable in Settings). You can 
 ## Code Quality
 
 ```bash
-make lint      # ESLint on frontend + backend
-make format    # Prettier auto-format on frontend + backend
+make lint      # ESLint on frontend + functions
+make format    # Prettier auto-format on frontend + functions
 ```
 
 **Pre-commit hook** (Husky): type-check → lint → format check runs automatically before every `git commit`.
@@ -117,11 +116,24 @@ make format    # Prettier auto-format on frontend + backend
 
 ## Deployment
 
-The app is configured for Vercel out of the box via `vercel.json`:
+The app is hosted on Cloudflare Pages (`wrangler.toml`):
 
-- Frontend is built with Vite and served as a static SPA
-- Backend API routes are deployed as Vercel serverless functions under `/api`
+- Frontend is built with Vite and served from `frontend/dist` as a static SPA
+- `functions/` is deployed as Pages Functions under `/api` (same origin, so the session cookie stays first-party)
+
+**Git integration (recommended):** in the Cloudflare dashboard, go to Workers & Pages → Create → Pages → Connect to Git, pick this repo, and use:
+
+| Setting | Value |
+|---|---|
+| Framework preset | None |
+| Build command | `cd frontend && npm ci && npm run build` |
+| Build output directory | `frontend/dist` |
+
+Every push to `main` then deploys automatically.
+
+**Manual deploy:**
 
 ```bash
-vercel deploy
+npx wrangler login
+make deploy
 ```

@@ -2,39 +2,38 @@
 
 ## Project Overview
 
-SRCGo Web is a Vercel-hosted web app that ports the SRCGo React Native mobile app to the browser. It authenticates with UCR's InnoSoft/CAS system and displays a time-refreshing CODE128 barcode used for building access at UCR.
+SRCGo Web is a Cloudflare Pages-hosted web app that ports the SRCGo React Native mobile app to the browser. It authenticates with UCR's InnoSoft/CAS system and displays a time-refreshing CODE128 barcode used for building access at UCR.
 
 ## Project Structure
 
 ```
 /
 ├── CLAUDE.md
-├── vercel.json          ← build + routing config for Vercel
+├── wrangler.toml        ← Cloudflare Pages config (build output: frontend/dist)
 ├── frontend/            ← Vite + React + TypeScript + TailwindCSS
-└── backend/             ← Node.js TypeScript serverless functions
-    └── api/
-        ├── auth/
-        │   ├── login.ts     POST /api/auth/login
-        │   └── session.ts   DELETE /api/auth/session (logout)
-        └── barcode.ts       GET /api/barcode
+├── functions/           ← Cloudflare Pages Functions (Workers runtime, file-based routing)
+│   └── api/
+│       ├── auth/
+│       │   ├── login.ts     POST /api/auth/login
+│       │   └── session.ts   DELETE /api/auth/session (logout)
+│       └── barcode.ts       GET /api/barcode
+└── lib/                 ← shared helpers: http.ts (cookie-jar fetch client), session.ts
 ```
 
 ## Commands
 
 ```bash
 # Install dependencies
-cd frontend && npm install
-cd backend && npm install
+make setup
 
 # Local development (run both concurrently)
-vercel dev          # serves backend API on :3000
-cd frontend && npm run dev   # Vite dev server on :5173 (proxies /api → :3000)
+make dev    # wrangler pages dev on :3000 + Vite on :8000 (proxies /api → :3000)
 
 # Build frontend
 cd frontend && npm run build
 
-# Deploy
-vercel deploy
+# Deploy (or push to main with Cloudflare Git integration)
+make deploy
 ```
 
 ## Architecture
@@ -79,5 +78,5 @@ Key colors:
 
 ## Key Dependencies
 
-- **Backend**: `axios`, `axios-cookiejar-support`, `tough-cookie`, `cookie`
+- **Functions**: `cookie`; HTTP + cookie jar is hand-rolled in `lib/http.ts` on `fetch` (the Workers runtime has no Node `http`, so axios/tough-cookie can't be used)
 - **Frontend**: `react`, `react-router-dom`, `jsbarcode`, `tailwindcss`, `vite`
